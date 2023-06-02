@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  spark:
+    build: .
+    command: tail -F anything
+    image: pnthrleo/spark-template:latest
+    ports:
+      - "4040:4040"
+      - "8888:8888"
+    volumes:
+      - ./src:/app/src
+      - ./data:/app/data
+      - ./output:/app/output
