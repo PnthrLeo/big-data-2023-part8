@@ -1,0 +1,14 @@
+# Ignore pycache folders
+__pycache__
+
+# Ignore ipynb checkpoints
+.ipynb_checkpoints
+
+# Ignore trash folders
+.Trash*
+
+# Ignore data folder
+data
+
+# Ignore output folder
+output
