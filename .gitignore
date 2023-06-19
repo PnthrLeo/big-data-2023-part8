@@ -12,3 +12,7 @@ data
 
 # Ignore output folder
 output
+
+metastore_db
+derby.log
+database/src
