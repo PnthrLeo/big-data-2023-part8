@@ -68,24 +68,6 @@ RUN DOWNLOAD_URL="https://downloads.lightbend.com/scala/2.12.18/scala-2.12.18.tg
     && rm -rf "${TMP_DIR}" \
     && scala -version
 
-# Download mssql connector for pyspark
-RUN DOWNLOAD_URL="https://repo1.maven.org/maven2/com/microsoft/azure/spark-mssql-connector_2.12/1.3.0-BETA/spark-mssql-connector_2.12-1.3.0-BETA.jar" \
-    && TMP_DIR="$(mktemp -d)" \
-    && curl "${DOWNLOAD_URL}" --output "${TMP_DIR}/spark-mssql-connector.jar" \
-    && mkdir -p "${SPARK_HOME}/jars" \
-    && mv "${TMP_DIR}/spark-mssql-connector.jar" "${SPARK_HOME}/jars" \
-    && rm -rf "${TMP_DIR}"
-
-RUN DOWNLOAD_URL="https://github.com/microsoft/mssql-jdbc/releases/download/v11.2.0/mssql-jdbc-11.2.0.jre11.jar" \
-    && TMP_DIR="$(mktemp -d)" \
-    && curl "${DOWNLOAD_URL}" --output "${TMP_DIR}/ojdbc11.jar" \
-    && mkdir -p "${SPARK_HOME}/jars" \
-    && mv "${TMP_DIR}/ojdbc11.jar" "${SPARK_HOME}/jars" \
-    && rm -rf "${TMP_DIR}"
-
-# Add folder with mssql connector to PATH
-ENV PATH="${PATH}:${SPARK_HOME}/jars"
-
 WORKDIR /app
 COPY requirements.txt /app/requirements.txt
 RUN pip install -r requirements.txt
