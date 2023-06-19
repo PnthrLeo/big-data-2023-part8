@@ -1,6 +1,7 @@
 version: '3.8'
 services:
   spark:
+    container_name: spark
     build: .
     command: tail -F anything
     image: pnthrleo/spark-template:latest
@@ -11,3 +12,16 @@ services:
       - ./src:/app/src
       - ./data:/app/data
       - ./output:/app/output
+    networks:
+      - proxy
+    environment:
+      - DB_ADRESS=${APP_DB_ADRESS}
+      - DB_IP=${APP_DB_IP}
+      - DB_PORT=${APP_DB_PORT}
+      - DB_DATABASE=${APP_DB_DATABASE}
+      - DB_USERNAME=${APP_DB_USERNAME}
+      - DB_PASSWORD=${APP_DB_PASSWORD}
+networks:
+  proxy:
+    name: ${APP_NETWORK_NAME}
+    external: true
