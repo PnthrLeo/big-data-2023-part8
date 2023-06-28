@@ -16,3 +16,15 @@ output
 metastore_db
 derby.log
 database/src
+.metals
+.vscode
+
+data_mart/project/target
+data_mart/target/global-logging
+data_mart/target/scala-2.12/classes
+data_mart/target/scala-2.12/sync
+data_mart/target/scala-2.12/update
+data_mart/target/scala-2.12/zinc
+data_mart/target/streams
+data_mart/target/task-temp-directory
+data_mart/target/.history3

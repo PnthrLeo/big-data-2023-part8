@@ -2,11 +2,10 @@ import argparse
 
 import findspark
 from pyspark.sql import SparkSession
+from pyspark.sql import DataFrame
 
 from configs import feature_vector_col, scaled_feature_vector_col
-from database.database import Database
 from models import CustomKMeans
-from preprocessing import transform_data
 from utils.spark import keep_spark_web_ui_alive
 
 findspark.add_packages(["com.microsoft.azure:spark-mssql-connector_2.12:1.3.0-BETA"])
@@ -27,19 +26,22 @@ if __name__ == '__main__':
         .config('spark.executor.cores', '5') \
         .config('spark.executor.memory', '5g') \
         .config('spark.driver.memory', '5g') \
+        .config("spark.jars", "../data_mart/target/scala-2.12/data-mart_2.12-1.0.jar") \
         .getOrCreate()
 
-    database = Database()
-    df = database.get_data(spark, 'data', args.data_name)
+    sc = spark.sparkContext
+    sc.setLogLevel('ERROR')
     
-    df = transform_data(df)
+    jdf = sc._jvm.datamart.DataMart.get_data_for_kmeans(args.data_name)
+    df = DataFrame(jdf, spark)
 
     trainer = CustomKMeans({'k': args.k, 'random_seed': args.random_seed})
     trainer.fit(df)
     res_df = trainer.transform(df)
     res_df = res_df.drop(feature_vector_col, scaled_feature_vector_col)
     
-    database.set_data(res_df, 'experiments', args.experiment_name)
+    jres_df = res_df._jdf
+    sc._jvm.datamart.DataMart.set_experiments_data(jres_df, args.experiment_name)
     
     trainer.save_model(args.save_model_path)
 
