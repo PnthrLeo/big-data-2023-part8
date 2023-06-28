@@ -12,6 +12,7 @@ services:
       - ./src:/app/src
       - ./data:/app/data
       - ./output:/app/output
+      - ./data_mart:/app/data_mart
     networks:
       - proxy
     environment:

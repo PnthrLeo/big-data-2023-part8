@@ -68,6 +68,19 @@ RUN DOWNLOAD_URL="https://downloads.lightbend.com/scala/2.12.18/scala-2.12.18.tg
     && rm -rf "${TMP_DIR}" \
     && scala -version
 
+# Set SBT environment variables
+ENV SBT_HOME="/home/sbt"
+ENV PATH="${PATH}:${SBT_HOME}/bin"
+
+# Download SBT and install
+RUN DOWNLOAD_URL="https://github.com/sbt/sbt/releases/download/v1.9.0/sbt-1.9.0.tgz" \
+    && TMP_DIR="$(mktemp -d)" \
+    && curl -L "${DOWNLOAD_URL}" --output "${TMP_DIR}/sbt.gz" \
+    && mkdir -p "${SBT_HOME}" \
+    && tar -xzf "${TMP_DIR}/sbt.gz" -C "${SBT_HOME}" --strip-components=1 \
+    && rm -rf "${TMP_DIR}" \
+    && sbt --version
+
 WORKDIR /app
 COPY requirements.txt /app/requirements.txt
 RUN pip install -r requirements.txt
