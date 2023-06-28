@@ -1,14 +1,9 @@
 import argparse
-
 import findspark
-from pyspark import SparkContext
 from pyspark.sql import SparkSession
 
-from database.database import Database
-from preprocessing import load_csv_data
 
 findspark.add_packages(["com.microsoft.azure:spark-mssql-connector_2.12:1.3.0-BETA"])
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -22,10 +17,11 @@ if __name__ == '__main__':
         .config('spark.executor.cores', '5') \
         .config('spark.executor.memory', '5g') \
         .config('spark.driver.memory', '5g') \
+        .config("spark.jars", "../data_mart/target/scala-2.12/data-mart_2.12-1.0.jar") \
         .getOrCreate()
-
-    df = load_csv_data(spark, args.data_path)
+        
+    sc = spark.sparkContext
+    sc.setLogLevel('ERROR')
     
-    database = Database()
-    database.set_data(df, 'data', args.data_name)
+    sc._jvm.datamart.DataMart.set_data_for_kmeans(args.data_path, args.data_name)
     spark.stop()
