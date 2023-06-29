@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: spark
+  name: spark
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      io.kompose.service: spark
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/proxy-net: "true"
+        io.kompose.service: spark
+    spec:
+      containers:
+        - args: ["tail", "-F", "anything"]
+          env:
+            - name: DB_ADRESS
+              value: database:1433
+            - name: DB_DATABASE
+              value: kmeans
+            - name: DB_IP
+              value: database
+            - name: DB_PASSWORD
+              value: gig@chad_gigAchad0vich
+            - name: DB_PORT
+              value: "1433"
+            - name: DB_USERNAME
+              value: sa
+          image: pnthrleo/spark-template:latest
+          name: spark
+          ports:
+            - containerPort: 4040
+            - containerPort: 8888
+          resources: {}
+          volumeMounts:
+            - mountPath: /app/src
+              name: spark-claim0
+            - mountPath: /app/data
+              name: spark-claim1
+            - mountPath: /app/output
+              name: spark-claim2
+            - mountPath: /app/data_mart
+              name: spark-claim3
+      restartPolicy: Always
+      volumes:
+        - name: spark-claim0
+          hostPath:
+            path: /app/src
+        - name: spark-claim1
+          hostPath:
+            path: /app/data
+        - name: spark-claim2
+          hostPath:
+            path: /app/output
+        - name: spark-claim3
+          hostPath:
+            path: /app/data_mart
+status: {}

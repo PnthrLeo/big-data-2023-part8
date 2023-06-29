@@ -16,13 +16,13 @@ services:
     networks:
       - proxy
     environment:
-      - DB_ADRESS=${APP_DB_ADRESS}
-      - DB_IP=${APP_DB_IP}
-      - DB_PORT=${APP_DB_PORT}
-      - DB_DATABASE=${APP_DB_DATABASE}
-      - DB_USERNAME=${APP_DB_USERNAME}
-      - DB_PASSWORD=${APP_DB_PASSWORD}
+      - DB_ADRESS=database:1433
+      - DB_IP=database
+      - DB_PORT=1433
+      - DB_DATABASE=kmeans
+      - DB_USERNAME=sa
+      - DB_PASSWORD=gig@chad_gigAchad0vich
 networks:
   proxy:
-    name: ${APP_NETWORK_NAME}
+    name: proxy-net
     external: true

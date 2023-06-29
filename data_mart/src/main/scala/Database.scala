@@ -57,17 +57,19 @@ class Database {
 
         try {
             val statement = connection.createStatement()
-            val resultSet = statement.executeQuery(s"CREATE DATABASE $db_database")
+            statement.execute(s"CREATE DATABASE $db_database")
             println(s"Created database $db_database")
         } catch {
             case e: Exception => println(s"Database $db_database already exists")
         }
+        val statement = connection.createStatement()
+        statement.execute(s"USE $db_database")
     }
 
     def set_data(df: DataFrame, schema_name: String, table_name: String): Unit = {
         try {
             val statement = connection.createStatement()
-            val resultSet = statement.executeQuery("CREATE SCHEMA " + schema_name)
+            statement.execute("CREATE SCHEMA " + schema_name)
             println("Created schema " + schema_name)
         } catch {
             case e: Exception => println("Writing to existing schema " + schema_name)

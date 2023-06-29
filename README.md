@@ -34,3 +34,9 @@
 1. Была реализована и интегрирована витрина данных на Scala.
 2. Был получен опыт написания скриптов на Scala.
 3. Был получен опыт интеграции Scala-кода в PySpark-приложение.
+
+
+minikube start --memory=12g --cpus=10
+minikube mount ./:/app
+kubectl apply -f proxy-net-networkpolicy.yaml,database-service.yaml,spark-service.yaml,database-deployment.yaml,spark-deployment.yaml
+kubectl exec --stdin --tty [pod-name] -- /bin/bash

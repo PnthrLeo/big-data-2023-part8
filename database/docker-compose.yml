@@ -6,17 +6,13 @@ services:
     image: mcr.microsoft.com/mssql/server:2022-latest
     ports:
       - "${DB_MSSQL_ADRESS}:1433"
-    volumes:
-      - ./src:/app/src
-      - ./data:/app/data
-      - ./output:/app/output
     environment:
       - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=${DB_MSSQL_SA_PASSWORD}
-      - MSSQL_PID=${DB_MSSQL_PID}
+      - MSSQL_SA_PASSWORD=gig@chad_gigAchad0vich
+      - MSSQL_PID=sa
     networks:
       - proxy
 networks:
   proxy:
     driver: bridge
-    name: ${DB_NETWORK_NAME}
+    name: proxy-net
